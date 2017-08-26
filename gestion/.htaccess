@@ -1,0 +1,7 @@
+ErrorDocument  404  /error.html
+RewriteEngine On
+AddDefaultCharset utf-8
+Options -indexes
+RewriteBase /gestion/
+
+RewriteRule ^([a-zA-Z\_\-]+)\.html$  index.php?page=$1 [QSA,L]

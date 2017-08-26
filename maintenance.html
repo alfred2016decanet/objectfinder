@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="icon" href="/img/favicon.png" type="image/png" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script type="text/JavaScript">
+	
+	
+	$(document).ready(function() {
+		var timeToWait = parseInt($('#timeToWait').html());
+		if (isNaN(timeToWait)) {
+			timeToWait = 30;
+		}
+		if (timeToWait == 0) {
+			return;
+		}
+		
+		setInterval(function() {
+			if (timeToWait <= 0) {
+				$('#timeToWait').html('');
+				location.reload(true);
+			} else {
+				$('#timeToWait').html(timeToWait--);
+			}
+		}, 1000);
+	});
+	</script>
+	<style>
+		#maintenanceInfos {
+			font-family: monospace;
+			width: 500px;  margin-left: -250px;
+			height: 8em;
+			margin-top:  50%;
+		}
+		#timeToWait {
+			position: relative;
+			bottom: 0;
+			font-size: 12px;
+			text-align: right;
+		}
+		BODY {
+			background-color: #000000;
+			color: #FFFFFF;
+			padding-left: 50%;
+		}
+	</style>
+</head>
+<body>
+	<div id="maintenanceInfos">
+		The website is currently under maintenance.<br>
+		We apologize for the inconvenience.<br>
+		<br>
+		Le site est actuellement en cours de maintenance.<br>
+		Veuillez nous excuser pour la gène occasionée.<br>
+		<div id="timeToWait">10</div>
+	</div>
+</body>
+</html>

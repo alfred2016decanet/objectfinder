@@ -1,0 +1,83 @@
+RewriteEngine On
+RewriteBase /
+
+Options -indexes
+Options -MultiViews
+
+AddCharset utf-8 .html .css .js .xml .json .rss
+AddDefaultCharset utf-8
+
+#ExpiresActive On
+#ExpiresDefault "access plus 7200 seconds"
+#ExpiresByType image/jpg "access plus 1 year"
+#ExpiresByType image/jpeg "access plus 1 year"
+#ExpiresByType image/png "access plus 1 year"
+#ExpiresByType image/gif "access plus 1 year"
+#AddType image/x-icon .ico
+AddType video/mp4 .mp4
+AddType video/x-m4v .m4v
+AddType application/x-shockwave-flash .swf
+#ExpiresByType image/ico "access plus 1 year"
+#ExpiresByType image/icon "access plus 1 year"
+#ExpiresByType image/x-icon "access plus 1 year"
+#ExpiresByType text/css "access plus 2592000 seconds"
+#ExpiresByType text/javascript "access plus 2592000 seconds"
+#ExpiresByType application/javascript A259200
+#ExpiresByType application/x-javascript "access plus 2592000 seconds"
+#ExpiresByType application/x-shockwave-flash "access plus 2592000 seconds"
+
+<FilesMatch "\\.(ico|jpe?g|png|gif|swf|gz)$">
+#Header set Cache-Control "max-age=2592000, public"
+</FilesMatch>
+<FilesMatch "\\.(js|css)$">
+#Header set Cache-Control "max-age=2592000, private"
+</FilesMatch>
+<FilesMatch "\.(html|pl|php|cgi|spl|scgi|fcgi)$">
+#Header unset Cache-Control
+</FilesMatch>
+
+#SITEMAP
+RewriteRule ^sitemap\.xml$  sitemap.xml [L]
+RewriteRule ^rss_([^\.]+)\.xml$  rss.php?flux=$1 [L]
+
+#VERIF GOOGLE
+RewriteRule ^google([a-z0-9]+)\.html$  google$1.html [L]
+
+RewriteRule ^apple-touch-icon\.png$   assets/img/microids-144x144.png [L]
+RewriteRule ^apple-touch-icon-[0-9].* assets/img/microids-114x114.png [L]
+
+#REWRITE IMAGES
+#format 1 => format 1
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})\.(jpg|jpeg|png|JPG|JPEG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3 [L]
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})-fil\.(jpg|jpeg|png|JPG|JPEG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3&filigrane=1 [QSA,L]
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})-c\.(jpg|jpeg|png|JPG|JPEG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3&mode=crop [L]
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})-cl\.(jpg|jpeg|png|JPG|JPEG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3&mode=cropLeft [L]
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})-cr\.(jpg|jpeg|png|JPG|JPEG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3&mode=cropRight [L]
+#force
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})-f\.(jpg|jpeg|png|JPG|JPEG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3&force=1 [L]
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})-c-f\.(jpg|jpeg|png|JPG|JPEG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3&mode=crop&force=1 [L]
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})-cl-f\.(jpg|jpeg|png|JPG|JPEG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3&mode=cropLeft&force=1 [L]
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})-cr-f\.(jpg|jpeg|png|JPG|JPEG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3&mode=cropRight&force=1 [L]
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+)-l([0-9]{1,4})-h([0-9]{1,4})-rm\.(jpg|png|JPG|PNG|gif|GIF)$ controllers/util/getimage.php?img=data/img/$1.$4&large=$2&haut=$3&mode=resizeMax&force=1 [L]
+
+RewriteRule ^images/([a-zA-Z0-9/_\-.]+).(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$ data/img/$1.$2 [L]
+
+# Traductions
+
+# probleme de casse de nom de langue
+RewriteRule ^(EN)(.*) en$2 [QSA,L,R=301]
+RewriteRule ^(FR)(.*) fr$2 [QSA,L,R=301]
+
+#DEFAULT
+RewriteRule ^([a-z]{2})/paiement-(ok|no|ipn)-(.+)/?$  index.php?langsite=$1&page=paiement-$2&ckuser=$3 [QSA,L]
+RewriteRule ^api/(.+)$  /php/api/$1 [QSA,L]
+
+RewriteRule ^([a-z]{2})/?$  index.php?langsite=$1&page=index [QSA,L]
+RewriteRule ^([a-z]{2})?$  index.php?langsite=$1&page=index [QSA,L]
+RewriteRule ^([a-z]{2})/?([a-zA-Z0-9\_\-\/,]+)?/?$  index.php?langsite=$1&page=$2 [QSA,L]
+RewriteRule ^([a-z]{2})/([a-zA-Z0-9\_\-\/,]+)(\/)?$  index.php?page=$1 [QSA,L]
+RewriteRule ^([a-z]{2})/([a-zA-Z0-9\_\-\/,]+)(\.html)?$  index.php?langsite=$1&page=$2 [QSA,L]
+
+#combine/gzip js+css
+RewriteRule ^assets/style/(.*\.css) controllers/util/combine.php?type=css&files=$1
+RewriteRule ^assets/javascript/(.*\.js) controllers/util/combine.php?type=javascript&files=$1

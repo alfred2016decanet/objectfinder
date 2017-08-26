@@ -1,0 +1,9 @@
+html, body {
+    background-color: #333;
+    color: #fff;
+}
+
+.cover-heading{
+	text-align: center;
+	color: #333;
+}
